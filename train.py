@@ -9,14 +9,14 @@ import time
 # 超参数设置
 learning_rate = 1e-4
 batch_size = 16
-num_epochs = 100
+num_epochs = 10000
 
 transform = transforms.Compose([
     transforms.Resize((224, 224)),  # 或其他您需要的大小
     transforms.ToTensor(),
 ])
-high_dir = '/Users/zane/Desktop/B301MM/high'
-low_dir = '/Users/zane/Desktop/B301MM/low'
+high_dir = 'B301MM/high'
+low_dir = 'B301MM/low'
 
 train_dataset = CTImagesDataset(high_dir, low_dir, transform)
 train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
