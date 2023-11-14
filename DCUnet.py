@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchsummary
+
 ACTIVATION_FUNCTION = nn.ReLU
 
 
@@ -107,12 +108,13 @@ class OutConv(nn.Module):
 
 
 class DualChannelUnet(nn.Module):
-    def __init__(self, in_channels, out_channels, bilinear=True, maxpool=True):
+    def __init__(self, in_channels, out_channels, device, bilinear=True, maxpool=True):
         super(DualChannelUnet, self).__init__()
         self.n_channels = in_channels
         self.n_classes = out_channels
         self.bilinear = bilinear
         self.maxpool = maxpool
+        self.device = device
         self.inc = DoubleConv(in_channels, 64)
         self.down1 = Down(64, 128)
         self.down2 = Down(128, 256)
@@ -124,6 +126,7 @@ class DualChannelUnet(nn.Module):
         self.up3 = Up(256, 128 // factor, bilinear)
         self.up4 = Up(128, 64, bilinear)
         self.outc = OutConv(64, out_channels)
+        self.to(self.device)
 
     def forward(self, x):
         x1 = self.inc(x)

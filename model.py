@@ -12,7 +12,7 @@ class DCDDPM(nn.Module):
 
     def _get_beta_schedule(self, schedule, T):
         if schedule == "linear":
-            return torch.linspace(0.0001, 0.02, T)
+            return torch.linspace(0.0001, 0.02, T).to(self.unet.device)
         else:
             raise ValueError("Unknown beta schedule")
 
@@ -50,6 +50,6 @@ class DCDDPM(nn.Module):
 
     def forward(self, x_start):
         self.control_seed()
-        t = torch.randint(0, self.T, (x_start.size(0),), device=x_start.device)
+        t = torch.randint(0, self.T, (x_start.size(0),), device=self.unet.device)
         x_t, scaled_noise = self.add_noise_sample(x_start, t)
         return self.get_loss(x_t, scaled_noise, t)
