@@ -42,8 +42,8 @@ if __name__ == '__main__':
         transforms.Resize((224, 224)),  # 或其他您需要的大小
         transforms.ToTensor(),
     ])
-    high_dir = '/Users/zane/Desktop/B301MM/high'
-    low_dir = '/Users/zane/Desktop/B301MM/low'
+    high_dir = 'B301MM/high'
+    low_dir = 'B301MM/low'
 
     ct_dataset = CTImagesDataset(high_dir, low_dir, transform)
     ct_dataloader = DataLoader(ct_dataset, batch_size=4, shuffle=True)

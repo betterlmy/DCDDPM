@@ -4,6 +4,7 @@ from dataset_loader import CTImagesDataset
 from model import DCDDPM
 from torchvision import transforms
 from DCUnet import *
+import time
 
 # 超参数设置
 learning_rate = 1e-4
@@ -29,6 +30,7 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 # 训练循环
 for epoch in range(num_epochs):
+    start_time = time.time()
     for high_img, low_img in train_loader:
         # 假设模型的输入是高低图像的组合
         # inputs = torch.cat((high_img, low_img), dim=1)
@@ -38,8 +40,7 @@ for epoch in range(num_epochs):
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
-    print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
+    print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}, Used: {time.time() - start_time:.4f}s')
 
 # 保存模型
 torch.save(model.state_dict(), 'ddpm_model.pth')
