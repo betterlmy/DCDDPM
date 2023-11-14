@@ -44,9 +44,9 @@ class DCDDPM(nn.Module):
         self.control_seed()
 
         pred_noise = self.unet(x_t)  # self.unet(x_t, t)
-        loss = F.mse_loss(pred_noise, scaled_noise, reduction="none")
+        loss = F.mse_loss(pred_noise, scaled_noise, reduction="sum")
         # loss = torch.mean((x_recon - x_start) ** 2)
-        return loss.mean()
+        return loss/x_t.size(0)
 
     def forward(self, x_start):
         self.control_seed()
