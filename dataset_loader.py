@@ -38,7 +38,7 @@ class CTImagesDataset(Dataset):
 
 if __name__ == '__main__':
     transform = transforms.Compose([
-        transforms.Resize((224, 224)),  # 或其他您需要的大小
+        transforms.Resize((224, 224)),
         transforms.ToTensor(),
     ])
     high_dir = 'B301MM/high'
@@ -47,5 +47,4 @@ if __name__ == '__main__':
     ct_dataset = CTImagesDataset(high_dir, low_dir, transform)
     ct_dataloader = DataLoader(ct_dataset, batch_size=4, shuffle=True)
     for high_img, low_img in ct_dataloader:
-        # 您的训练代码...
         pass
