@@ -30,7 +30,8 @@ def sample(model=None):
     if model is None:
         model = DCDDPM(DualChannelUnet(in_channels=1, out_channels=1, device=device))
         model.load_state_dict(torch.load(r"ddpm_model.pth"))
-
+    else:
+        device = model.unet.device
     noise_image = torch.randn(5, 1, 224, 224).to(device)
     generated_image = model.reverse_diffusion(noise_image)
 

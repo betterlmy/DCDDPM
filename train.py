@@ -13,22 +13,23 @@ if __name__ == "__main__":
     device = torch.device("cpu")
     if torch.cuda.is_available():
         # 获取 GPU 数量
-        num_cuda_devices = torch.cuda.device_count()
-        print(f"CUDA 可用，有 {num_cuda_devices} 个 GPU 可用")
-        device = torch.device(f"cuda:{num_cuda_devices - 1}")
-    print("device:", device)
+        print(f"CUDA 可用")
+        device = torch.device(f"cuda:5")
+    print("当前正在使用设备:", device)
 
     # 超参数设置
     learning_rate = 1e-4
     batch_size = 32
     num_epochs = 1000
 
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),  # 或其他您需要的大小
-        transforms.ToTensor(),
-    ])
-    high_dir = 'B301MM/high'
-    low_dir = 'B301MM/low'
+    transform = transforms.Compose(
+        [
+            transforms.Resize((224, 224)),  # 或其他您需要的大小
+            transforms.ToTensor(),
+        ]
+    )
+    high_dir = "B301MM/high"
+    low_dir = "B301MM/low"
 
     train_dataset = CTImagesDataset(high_dir, low_dir, transform)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -53,8 +54,10 @@ if __name__ == "__main__":
 
                 t.set_postfix(loss=f"{loss.item():.4f}")
 
-        if (epoch + 1) % 50 == 0 & epoch != 0:
-            epoch_time = (time.time() - start_time)
-            print(f"Epoch {epoch + 1}/{num_epochs} finished, Avg Time per epoch: {epoch_time:.2f}s")
+        if (epoch + 1) % 50 == 0 and epoch != 0:
+            epoch_time = time.time() - start_time
+            print(
+                f"Epoch {epoch + 1}/{num_epochs} finished, Avg Time per epoch: {epoch_time:.2f}s"
+            )
             sample(model)
-            torch.save(model.state_dict(), 'ddpm_model.pth')
+            torch.save(model.state_dict(), "ddpm_model.pth")
